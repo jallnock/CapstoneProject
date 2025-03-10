@@ -1,8 +1,12 @@
-const pg = require("pg");
+const { Client } = require("pg");
 
-const client = new pg.Client(
-  "postgres://jennaallnock:Welcome123!@localhost:5432/restaurant_review_db"
-);
+const client = new Client({
+  user: "jenna",
+  host: "localhost",
+  database: "restaurant_review_db",
+  password: "Welcome123!",
+  port: 5432,
+});
 
 const connect = async () => {
   try {
