@@ -2,14 +2,13 @@ const { client, connect } = require("./index");
 
 const seedData = async () => {
   await connect();
-};
 
-try {
-  await client.query(`DELETE FROM reviews`);
-  await client.query(`DELETE FROM restaurants`);
-  await client.query(`DELETE FROM users`);
+  try {
+    await client.query(`DELETE FROM reviews`);
+    await client.query(`DELETE FROM restaurants`);
+    await client.query(`DELETE FROM users`);
 
-  await client.query(`
+    await client.query(`
     INSERT INTO users (username, email, password) VALUES
     ("user1", "user1@me.com", "password1"),
     ("user2", "user2@me.com", "password2"),
@@ -18,7 +17,7 @@ try {
     ("user5", "user5@me.com", "password5")
     `);
 
-  await client.query(`
+    await client.query(`
       INSERT INTO restaurants (name, address, category) VALUES
       ("Lazy Moon", 123 Pizza St", "Pizza"), 
       ("Chinese Tuxedo", "345 East Ave", "Chinese"), 
@@ -28,7 +27,7 @@ try {
       ("Gelataria", "234 E 86th St", "Ice Cream")
       `);
 
-  await client.query(`
+    await client.query(`
         INSERT INTO reviews (user_id, restaurant_id, rating, review_description) VALUES
         (1, 1, 5, "Best pizza in town!"),
         (2, 2, 4, "Such a fancy place. Great for a date night."),
@@ -38,7 +37,12 @@ try {
         (6, 6, 1, "Do not come here by any means. Will not be returning!")
         `);
 
-  console.log("Database seeded");
-} catch (error) {
-  console.error("Database not seeded");
-}
+    console.log("Database seeded");
+  } catch (error) {
+    console.error("Database not seeded");
+  }
+
+  client.end();
+};
+
+seedData();
