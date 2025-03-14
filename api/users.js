@@ -14,7 +14,7 @@ usersRouter.get("/", async (req, res, next) => {
 });
 
 // POST login
-uusersRouter.post("/login", async (req, res, next) => {
+usersRouter.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -72,5 +72,7 @@ usersRouter.post("/register", async (req, res, next) => {
     next({ name, message });
   }
 });
+
+// NEED TO ADD DELETE AND PATCH
 
 module.exports = usersRouter;
