@@ -6,7 +6,7 @@ const {
   createRestaurant,
   updateRestaurant,
   deleteRestaurant,
-} = require("../db");
+} = require("../db/index");
 
 //GET all restaurants
 restaurantsRouter.get("/", async (req, res, next) => {

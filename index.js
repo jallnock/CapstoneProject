@@ -4,7 +4,7 @@ const { PORT = 3000 } = process.env;
 const express = require("express");
 const server = express();
 
-const bodyParser = require("bodyparser");
+const bodyParser = require("body-parser");
 server.use(bodyParser.json());
 
 const morgan = require("morgan");
@@ -24,7 +24,13 @@ const { client } = require("./db");
 client.connect();
 
 const path = require("path");
-server.use(express.static(path.join(__dirname, public)));
+server.use(express.static(path.join(__dirname, "public")));
+
+const jwt = require("jsonwebtoken");
+const authenticateToken = (req, res, next) => {
+  authHeader = req.headers["authorization"];
+  const token = authHeader;
+};
 
 server.listen(PORT, () => {
   console.log("The server is running on port", PORT);

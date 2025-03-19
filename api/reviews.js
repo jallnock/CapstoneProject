@@ -6,7 +6,7 @@ const {
   createReview,
   updateReview,
   deleteReview,
-} = require("..db");
+} = require("../db/index");
 
 //GET ALL REVIEWS
 reviewsRouter.get("/", async (req, res, next) => {
@@ -66,3 +66,16 @@ reviewsRouter.patch("/:reviewId", async (req, res, next) => {
     next(error);
   }
 });
+
+// DELETE review
+reviewsRouter.delete("/:reviewId", async (req, res, next) => {
+  try {
+    const { reviewId } = req.params;
+    await deleteReview(reviewId);
+    res.send({ message: "Review deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = reviewsRouter;
