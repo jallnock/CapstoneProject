@@ -1,15 +1,40 @@
 const express = require("express");
 const usersRouter = express.Router();
-const { createUser, getAllUsers, getUserByUsername } = require("../db");
+const {
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+} = require("../db/index");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 //GET ALL USERS
-usersRouter.get("/", async (req, res, next) => {
+usersRouter.get("/", authenticateToken, async (req, res, next) => {
   try {
     const users = await getAllUsers();
     res.send({ users });
   } catch ({ name, message }) {
     next({ name, message });
+  }
+});
+
+//get single user by ID
+usersRouter.get("/:userID", authenticateToken, async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await getUserById(userId);
+    if (user) {
+      res.send({ user });
+    } else {
+      next({
+        name: "UserNotFoundError",
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -27,7 +52,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
   try {
     const user = await getUserByUsername(username);
-    if (user && user.password === password) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { id: user.id, username },
         process.env.JWT_SECRET,
@@ -60,7 +85,13 @@ usersRouter.post("/register", async (req, res, next) => {
       });
       return;
     }
-    const user = await createUser({ username, password, name, location });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await createUser({
+      username,
+      password: hashedPassword,
+      name,
+      location,
+    });
     const token = jwt.sign(
       { id: user.id, username },
 
@@ -73,6 +104,32 @@ usersRouter.post("/register", async (req, res, next) => {
   }
 });
 
-// NEED TO ADD DELETE AND PATCH
+//delete user
+usersRouter.delete("/:userId", authenticateToken, async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    await deleteUser(userId);
+    res.send({ message: "User has been deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//patch user
+usersRouter.patch("/:userId", authenticateToken, async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { username, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const updatedUser = await updateUser(userId, {
+      username,
+      email,
+      password: hashedPassword,
+    });
+    res.send({ message: "User has been updated", updatedUser });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = usersRouter;

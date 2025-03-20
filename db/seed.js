@@ -4,6 +4,7 @@ async function dropTables() {
   try {
     console.log("Dropping tables");
     await client.query(`
+      DROP TABLE IF EXISTS comments;
       DROP TABLE IF EXISTS reviews; 
       DROP TABLE IF EXISTS restaurants; 
       DROP TABLE IF EXISTS users; 
@@ -38,6 +39,12 @@ async function createTables() {
             restaurant_id INTEGER REFERENCES restaurants(id),
             rating INTEGER NOT NULL, 
             review_description TEXT NOT NULL
+            );
+            CREATE TABLE comments (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id),
+            review_id INTEGER REFERENCES reviews(id),
+            comment_text TEXT NOT NULL
             );
         `);
 
@@ -100,6 +107,24 @@ async function createInitialReviews() {
   }
 }
 
+async function createInitialComments() {
+  try {
+    console.log("Creating comments");
+    await client.query(`
+      INSERT INTO comments (user_id, review_id, comment_text) VALUES
+      (1, 1, 'I thought the same. Such amazing pizza!'),
+      (2, 2, 'I went on a date here. Such a great spot.'),
+      (3, 3, 'Thanks for the rec. The burger was to die for!!'),
+      (4, 4, 'I disagree. Way too overpriced...'),
+      (5, 5, 'Hmm interesting take. I actually really enjoyed it!')
+      `);
+    console.log("Finished creating comments");
+  } catch (error) {
+    console.error("Cannot add comment", error.message);
+    throw error;
+  }
+}
+
 async function rebuildDB() {
   try {
     await connect();
@@ -108,6 +133,7 @@ async function rebuildDB() {
     await createInitialUsers();
     await createInitialRestaurants();
     await createInitialReviews();
+    await createInitialComments();
   } catch (error) {
     console.error("Error", error.message);
     throw error;
@@ -126,6 +152,9 @@ async function testDB() {
 
     const reviews = await client.query("SELECT * FROM reviews");
     console.log("Reviews:", reviews.rows);
+
+    const comments = await client.query("SELECT * FROM comments");
+    console.log("Comments", comments.rows);
 
     console.log("Finished testing DB");
   } catch (error) {

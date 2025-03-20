@@ -26,12 +26,6 @@ client.connect();
 const path = require("path");
 server.use(express.static(path.join(__dirname, "public")));
 
-const jwt = require("jsonwebtoken");
-const authenticateToken = (req, res, next) => {
-  authHeader = req.headers["authorization"];
-  const token = authHeader;
-};
-
 server.listen(PORT, () => {
   console.log("The server is running on port", PORT);
 });

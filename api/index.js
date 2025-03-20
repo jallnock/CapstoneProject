@@ -49,6 +49,9 @@ apiRouter.use("/restaurants", restaurantsRouter);
 const reviewsRouter = require("./reviews");
 apiRouter.use("/reviews", reviewsRouter);
 
+const commentsRouter = require("./comments");
+apiRouter.use("/comments", commentsRouter);
+
 apiRouter.use((error, req, res, next) => {
   res.send(error);
 });

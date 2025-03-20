@@ -5,7 +5,7 @@ const client = new Client({
   host: "localhost",
   database: "restaurant_review_db",
   password: "Welcome123!",
-  port: 3000,
+  port: 5432,
 });
 
 const connect = async () => {
@@ -111,8 +111,66 @@ const createUser = async ({ username, email, password }) => {
 const updateUser = async (id, { username, email, password }) => {
   const res = await client.query(
     "UPDATE users SET username = $1, email = $2, password = $3 WHERE id = $4 RETURNING *",
-    [user]
+    [username, email, password, id]
   );
+  return res.rows[0];
 };
 
-module.exports = { client, connect };
+const deleteUser = async (id) => {
+  await client.query("DELETE FROM users WHERE id = $1", [id]);
+};
+
+//comment functions
+const getAllComments = async () => {
+  const res = await client.query("SELECT * FROM comments");
+  return res.rows;
+};
+
+const getCommentById = async (id) => {
+  const res = await client.query("SELECT * FROM comments WHERE id = $1", [id]);
+  return res.rows[0];
+};
+
+const createComment = async ({ user_id, review_id, comment_text }) => {
+  const res = await client.query(
+    "INSERT INTO comments (user_id, review_id, comment_text) VALUES ($1, $2, $3) RETURNING *",
+    [user_id, review_id, comment_text]
+  );
+  return res.rows[0];
+};
+
+const updateComment = async (id, { comment_text }) => {
+  const res = await client.query(
+    "UPDATE comments SET comment_text = $1 WHERE id = $2 RETURNING *",
+    [comment_text, id]
+  );
+  return res.rows[0];
+};
+
+const deleteComment = async (id) => {
+  await client.query("DELETE FROM comments WHERE id = $1", [id]);
+};
+
+module.exports = {
+  client,
+  connect,
+  getAllReviews,
+  getReviewsById,
+  createReview,
+  updateReview,
+  deleteReview,
+  getAllRestaurants,
+  getRestaurantById,
+  createRestaurant,
+  deleteRestaurant,
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  getAllComments,
+  getCommentById,
+  updateComment,
+  createComment,
+  deleteComment,
+};

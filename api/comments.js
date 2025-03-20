@@ -1,5 +1,12 @@
 const express = require("express");
 const commentsRouter = express.Router();
+const {
+  getAllComments,
+  getCommentById,
+  createComment,
+  updateComment,
+  deleteComment,
+} = require("../db/index");
 
 //get all comments
 commentsRouter.get("/", async (req, res, next) => {
@@ -59,4 +66,14 @@ commentsRouter.patch("/:commentId", async (req, res, next) => {
 });
 
 //delete comment
-commentsRouter.delete("/:commentId", async(req, res, next));
+commentsRouter.delete("/:commentId", async (req, res, next) => {
+  try {
+    const { commentId } = req.params;
+    await deleteComment(commentId);
+    res.send({ message: "Comment deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = commentsRouter;
