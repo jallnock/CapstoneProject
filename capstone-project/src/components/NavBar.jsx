@@ -1,14 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function Navigations({ token, logout }) {
+function NavBar({ token, logout }) {
   const navigate = useNavigate();
 
   return (
     <nav>
       <ul>
         <li>
-          <button onClick={() => navigate("/restaurants")}>Restaurants</button>
+          <button onClick={() => navigate("/")}>Home</button>
         </li>
         {token ? (
           <>
@@ -34,4 +34,4 @@ function Navigations({ token, logout }) {
   );
 }
 
-export default Navigations;
+export default NavBar;
