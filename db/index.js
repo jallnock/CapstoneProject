@@ -55,8 +55,15 @@ const deleteReview = async (id) => {
 
 //restaurant functions
 const getAllRestaurants = async () => {
-  const res = await client.query("SELECT * FROM restaurants");
-  return res.rows;
+  const { rows: restaurants } = await client.query("SELECT * FROM restaurants");
+  for (let restaurant of restaurants) {
+    const { rows: reviews } = await client.query(
+      "SELECT * FROM reviews WHERE restaurant_id = $1",
+      [restaurant.id]
+    );
+    restaurant.reviews = reviews;
+  }
+  return restaurants;
 };
 
 const getRestaurantById = async (id) => {
