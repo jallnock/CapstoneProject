@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import RestaurantsList from "./components/RestaurantList";
 import Account from "./components/Account";
+import "./App.css";
 
 function App() {
   const [token, setToken] = useState(null);
