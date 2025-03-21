@@ -21,7 +21,7 @@ restaurantsRouter.get("/", async (req, res, next) => {
 // GET RESTAURANT BY ID
 restaurantsRouter.get("/:restaurantId", async (req, res, next) => {
   try {
-    const { restaurantId } = req.params;
+    const restaurantId = Number(req.params.restaurantId);
     const restaurant = await getRestaurantById(restaurantId);
     if (restaurant) {
       res.send({ restaurant });

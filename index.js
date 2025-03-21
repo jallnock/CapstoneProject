@@ -1,13 +1,18 @@
 require("dotenv").config();
-
-const { PORT = 3000 } = process.env;
 const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+
 const server = express();
 
-const bodyParser = require("body-parser");
-server.use(bodyParser.json());
+server.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+  })
+);
 
-const morgan = require("morgan");
+server.use(express.json());
 server.use(morgan("dev"));
 
 server.use((req, res, next) => {
@@ -26,6 +31,7 @@ client.connect();
 const path = require("path");
 server.use(express.static(path.join(__dirname, "public")));
 
+const { PORT = 3000 } = process.env;
 server.listen(PORT, () => {
   console.log("The server is running on port", PORT);
 });

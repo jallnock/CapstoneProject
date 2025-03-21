@@ -60,10 +60,22 @@ const getAllRestaurants = async () => {
 };
 
 const getRestaurantById = async (id) => {
-  const res = await client.query("SELECT * FROM restaurants WHERE id = $1", [
-    id,
-  ]);
-  return res.rows[0];
+  const {
+    rows: [restaurant],
+  } = await client.query("SELECT * FROM restaurants WHERE id = $1", [id]);
+
+  if (!restaurant) {
+    return null;
+  }
+
+  const { rows: reviews } = await client.query(
+    "SELECT * FROM reviews WHERE restaurant_id = $1",
+    [id]
+  );
+
+  restaurant.reviews = reviews;
+
+  return restaurant;
 };
 
 const createRestaurant = async ({ name, address, phone, website, hours }) => {

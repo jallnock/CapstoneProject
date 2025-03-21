@@ -30,12 +30,14 @@ function RestaurantDetails() {
       <p>Category: {restaurant.category}</p>
       <h2>Reviews</h2>
       <ul>
-        {restaurant.reviews.map((review) => (
-          <li key={review.id}>
-            <p>Rating: {review.rating}</p>
-            <p>{review.review_description}</p>
-          </li>
-        ))}
+        {restaurant.reviews &&
+          restaurant.reviews.length > 0 &&
+          restaurant.reviews.map((review) => (
+            <li key={review.id}>
+              <p>Rating: {review.rating}</p>
+              <p>{review.review_description}</p>
+            </li>
+          ))}
       </ul>
     </div>
   );

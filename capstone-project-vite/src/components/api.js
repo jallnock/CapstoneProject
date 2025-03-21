@@ -1,5 +1,5 @@
 export const loginUser = async ({ username, password }) => {
-  const response = await fetch("http://localhost:3000/api/users/login", {
+  const response = await fetch(`http://localhost:3000/api/users/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -12,7 +12,7 @@ export const loginUser = async ({ username, password }) => {
 };
 
 export const registerUser = async ({ username, email, password }) => {
-  const response = await fetch("http://localhost:3000/api/users/register", {
+  const response = await fetch(`http://localhost:3000/api/users/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, email, password }),
@@ -34,7 +34,7 @@ export const submitReview = async ({
     throw new Error("Not authenticated");
   }
 
-  const response = await fetch("http://localhost:3000/api/reviews", {
+  const response = await fetch(`http://localhost:3000/api/reviews`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export const submitReview = async ({
 };
 
 export const fetchRestaurantById = async (id) => {
-  const response = await fetch("http://localhost:3000/api/restaurants/${id}");
+  const response = await fetch(`http://localhost:3000/api/restaurants/${id}`);
   if (!response.ok) {
     throw new Error("Cannot fetch restaurant");
   }
@@ -57,7 +57,7 @@ export const fetchRestaurantById = async (id) => {
 };
 
 export const fetchAllRestaurants = async () => {
-  const response = await fetch("http://localhost3000/api/restaurants");
+  const response = await fetch(`http://localhost:3000/api/restaurants`);
   if (!response.ok) {
     throw new Error("Cannot fetch restaurants");
   }
@@ -67,7 +67,7 @@ export const fetchAllRestaurants = async () => {
 export const fetchAccount = async () => {
   const token = localStorage.getItem("token");
 
-  const response = await fetch("http://localhost:3000/api/users/me", {
+  const response = await fetch(`http://localhost:3000/api/users/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -81,7 +81,7 @@ export const fetchAccount = async () => {
 export const fetchCurrentUser = async () => {
   const token = localStorage.getItem("token");
 
-  const response = await fetch("http://localhost:3000/api/users/me", {
+  const response = await fetch(`http://localhost:3000/api/users/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

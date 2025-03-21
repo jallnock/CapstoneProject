@@ -8,7 +8,21 @@ const {
   deleteUser,
 } = require("../db/index");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.sendStatus(401);
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
+    if (error) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
 
 //GET ALL USERS
 usersRouter.get("/", authenticateToken, async (req, res, next) => {
@@ -32,6 +46,20 @@ usersRouter.get("/:userID", authenticateToken, async (req, res, next) => {
         name: "UserNotFoundError",
         message: "User not found",
       });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+//get users/me - logged in user info
+usersRouter.get("/me", authenticateToken, async (req, res, next) => {
+  try {
+    const user = await getUserById(req.user.id);
+    if (user) {
+      res.send({ user });
+    } else {
+      res.status(404).send({ message: "User not found" });
     }
   } catch (error) {
     next(error);
