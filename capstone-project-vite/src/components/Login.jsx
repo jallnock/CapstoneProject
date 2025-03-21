@@ -16,7 +16,7 @@ function Login({ setToken }) {
 
       localStorage.setItem("token", token);
       setToken(token);
-      navigate("/account");
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
       setError("Incorrect username or password");
