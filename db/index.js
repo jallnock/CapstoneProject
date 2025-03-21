@@ -60,7 +60,7 @@ const getAllRestaurants = async () => {
 };
 
 const getRestaurantById = async (id) => {
-  const res = await client.query("SELECT * FROM restaurants WHRERE id = $1", [
+  const res = await client.query("SELECT * FROM restaurants WHERE id = $1", [
     id,
   ]);
   return res.rows[0];
@@ -163,6 +163,7 @@ module.exports = {
   getRestaurantById,
   createRestaurant,
   deleteRestaurant,
+  updateRestaurant,
   getAllUsers,
   getUserById,
   createUser,

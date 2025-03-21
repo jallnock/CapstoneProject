@@ -59,11 +59,11 @@ async function createInitialUsers() {
     console.log("Creating users");
     await client.query(` 
           INSERT INTO users (username, email, password) VALUES
-          ('user1', 'user1@me.com', 'password1'),
-          ('user2', 'user2@me.com', 'password2'),
-          ('user3', 'user3@me.com', 'password3'),
-          ('user4', 'user4@me.com', 'password4'), 
-          ('user5', 'user5@me.com', 'password5')
+          ('Joe Schmoe', 'user1@me.com', 'password1'),
+          ('Suzy Lu', 'user2@me.com', 'password2'),
+          ('Jennifer Smith', 'user3@me.com', 'password3'),
+          ('John Adams', 'user4@me.com', 'password4'), 
+          ('Megan Fox', 'user5@me.com', 'password5')
           `);
 
     console.log("Done creating users");
