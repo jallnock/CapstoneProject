@@ -14,6 +14,8 @@ function Register({ setToken }) {
     try {
       const response = await registerUser({ username, password, email });
 
+      console.log("api response", response);
+
       if (response.token) {
         localStorage.setItem("token", response.token);
         setToken(response.token);

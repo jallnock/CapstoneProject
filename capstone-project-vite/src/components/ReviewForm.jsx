@@ -9,8 +9,7 @@ function ReviewForm({ restaurantId, onNewReview }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newReview = await submitReview({
-        restaurant_id: restaurantId,
+      onNewReview({
         rating,
         review_description: reviewDescription,
       });
@@ -18,7 +17,6 @@ function ReviewForm({ restaurantId, onNewReview }) {
       setRating("");
       setReviewDescription("");
       setError(null);
-      onNewReview(newReview);
     } catch (error) {
       setError("Cannot post review");
     }

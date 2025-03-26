@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchRestaurantById } from "./api";
 import ReviewForm from "./ReviewForm";
+import { submitReview } from "./api";
 
 function RestaurantDetails() {
   const { id } = useParams();
@@ -25,11 +26,23 @@ function RestaurantDetails() {
     getRestaurant();
   }, [id]);
 
-  const handleNewReview = (newReview) => {
-    setRestaurant((prev) => ({
-      ...prev,
-      reviews: prev.reviews ? [...prev.reviews, newReview] : [newReview], // Fixed this line
-    }));
+  const handleNewReview = async (newReview) => {
+    try {
+      const savedReview = await submitReview({
+        restaurant_id: restaurant.id,
+        rating: newReview.rating,
+        review_description: newReview.review_description,
+      });
+      console.log("savedReview from backend:", savedReview);
+
+      setRestaurant((prev) => ({
+        ...prev,
+        reviews: [...(prev.reviews || []), savedReview],
+      }));
+    } catch (error) {
+      console.error("Cannot submit review:", error);
+      setError("Cannot submit review");
+    }
   };
 
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -41,18 +54,19 @@ function RestaurantDetails() {
       <p>{restaurant.address}</p>
       <p>Category: {restaurant.category}</p>
       <h2>Reviews</h2>
-      <ul>
-        {restaurant.reviews && restaurant.reviews.length > 0 ? (
-          restaurant.reviews.map((review) => (
-            <li key={review.id}>
+      {restaurant.reviews && restaurant.reviews.length > 0 ? (
+        <ul>
+          {restaurant.reviews.map((review) => (
+            <li key={Math.random()}>
               <p>Rating: {review.rating}</p>
               <p>{review.review_description}</p>
             </li>
-          ))
-        ) : (
-          <p>No reviews yet</p>
-        )}
-      </ul>
+          ))}
+        </ul>
+      ) : (
+        <p>No reviews yet</p>
+      )}
+
       <ReviewForm restaurantId={id} onNewReview={handleNewReview} />
     </div>
   );

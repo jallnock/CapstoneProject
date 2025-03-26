@@ -8,7 +8,13 @@ export const loginUser = async ({ username, password }) => {
   if (!response.ok) {
     throw new Error("Incorrect email or password");
   }
-  return response.json();
+  const data = await response.json();
+
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+  }
+
+  return data;
 };
 
 export const registerUser = async ({ username, email, password }) => {
@@ -21,7 +27,12 @@ export const registerUser = async ({ username, email, password }) => {
   if (!response.ok) {
     throw new Error("Failed to register");
   }
-  return response.json();
+  const data = await response.json();
+
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+  }
+  return data;
 };
 
 export const submitReview = async ({
