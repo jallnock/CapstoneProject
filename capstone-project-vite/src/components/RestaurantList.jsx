@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchAllRestaurants } from "./api";
+import AddRestaurantForm from "./AddNewRestaurantForm";
 
 function RestaurantsList() {
   const [restaurants, setRestaurants] = useState([]);

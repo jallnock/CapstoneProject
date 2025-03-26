@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchAllRestaurants } from "./api";
 
 function HomePage() {
   const [restaurants, setRestaurants] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -17,9 +18,14 @@ function HomePage() {
     fetchRestaurants();
   }, []);
 
+  const handleAddRestaurantClick = () => {
+    navigate("/add-restaurant");
+  };
+
   return (
     <div>
       <h1>Restaurant Review Buddy!</h1>
+      <button onClick={handleAddRestaurantClick}>Add A New Restaurant</button>
       <ul>
         {restaurants.map((restaurant) => (
           <li key={restaurant.id} style={{ marginBottom: "2rem" }}>
