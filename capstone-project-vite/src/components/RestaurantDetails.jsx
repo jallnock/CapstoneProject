@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchRestaurantById } from "./api";
 import ReviewForm from "./ReviewForm";
 import { submitReview } from "./api";
+import { deleteReview } from "./api";
 
 function RestaurantDetails() {
   const { id } = useParams();
@@ -33,7 +34,6 @@ function RestaurantDetails() {
         rating: newReview.rating,
         review_description: newReview.review_description,
       });
-      console.log("savedReview from backend:", savedReview);
 
       setRestaurant((prev) => ({
         ...prev,
@@ -42,6 +42,20 @@ function RestaurantDetails() {
     } catch (error) {
       console.error("Cannot submit review:", error);
       setError("Cannot submit review");
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await deleteReview(reviewId);
+
+      setRestaurant((prev) => ({
+        ...prev,
+        reviews: prev.reviews.filter((review) => review.id !== reviewId),
+      }));
+    } catch (error) {
+      console.error("Cannot delete review", error);
+      setError("Cannot delete review");
     }
   };
 
@@ -57,9 +71,12 @@ function RestaurantDetails() {
       {restaurant.reviews && restaurant.reviews.length > 0 ? (
         <ul>
           {restaurant.reviews.map((review) => (
-            <li key={Math.random()}>
+            <li key={review.id}>
               <p>Rating: {review.rating}</p>
               <p>{review.review_description}</p>
+              <button onClick={() => handleDeleteReview(review.id)}>
+                Delete Review
+              </button>
             </li>
           ))}
         </ul>

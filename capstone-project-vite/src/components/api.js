@@ -59,6 +59,27 @@ export const submitReview = async ({
   return response.json();
 };
 
+export const deleteReview = async (reviewId) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found");
+  }
+  const response = await fetch(
+    `http://localhost:3000/api/reviews/${reviewId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to delete review");
+  }
+  return response.json();
+};
+
 export const fetchRestaurantById = async (id) => {
   const response = await fetch(`http://localhost:3000/api/restaurants/${id}`);
   if (!response.ok) {
