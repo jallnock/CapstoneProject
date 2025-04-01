@@ -9,7 +9,8 @@ function Account() {
     const getUser = async () => {
       try {
         const data = await fetchCurrentUser();
-        setUser(data.user);
+        console.log("FULL API RESPONSE:", data);
+        setUser(data);
       } catch (error) {
         console.error("Cannot load user", error);
         setError("Unable to load account");
@@ -17,14 +18,44 @@ function Account() {
     };
     getUser();
   }, []);
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!user) return <p>Loading your account...</p>;
+
+  if (error)
+    return (
+      <p style={{ color: "red", padding: "2rem", textAlign: "center" }}>
+        {error}
+      </p>
+    );
+
+  if (!user)
+    return (
+      <p style={{ padding: "2rem", textAlign: "center" }}>
+        Loading your account...
+      </p>
+    );
 
   return (
-    <div>
-      <h2>Welcome, {user.username}!</h2>
-      <p>Email: {user.email}</p>
-      <p>Name: {user.name}</p>
+    <div className="page-content">
+      <div className="container">
+        <div className="account-card">
+          <h2>Welcome, {user.username || "Guest"}!</h2>
+          <p>
+            <strong>Email:</strong> {user.email || "Not provided"}
+          </p>
+          <p>
+            <strong>Name:</strong> {user.name || "Not available"}
+          </p>
+
+          <button
+            className="logout-button"
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.href = "/";
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

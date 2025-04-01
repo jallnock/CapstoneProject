@@ -1,4 +1,5 @@
 const { Client } = require("pg");
+const usersRouter = require("./api/users"); // 👈 path may vary
 
 const client = new Client({
   user: "jenna",
@@ -85,10 +86,10 @@ const getRestaurantById = async (id) => {
   return restaurant;
 };
 
-const createRestaurant = async ({ name, address, phone, website, hours }) => {
+const createRestaurant = async ({ name, address, category }) => {
   const res = await client.query(
-    "INSERT INTO restaurants (name, address, phone, website, hours) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [name, address, phone, website, hours]
+    "INSERT INTO restaurants (name, address, category) VALUES ($1, $2, $3) RETURNING *",
+    [name, address, category]
   );
   return res.rows[0];
 };
@@ -115,8 +116,24 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async (id) => {
-  const res = await client.query("SELECT * FROM users WHERE id = $1", [id]);
+  const userId = parseInt(id);
+  if (isNaN(userId)) {
+    throw new Error("Invalid user ID passed to getUserById");
+  }
+
+  console.log(" getUserById received ID:", userId);
+
+  const res = await client.query("SELECT * FROM users WHERE id = $1", [userId]);
+  console.log("👉 User query result:", res.rows);
+
   return res.rows[0];
+};
+
+const getUserByUsername = async (username) => {
+  const {
+    rows: [user],
+  } = await client.query("SELECT * FROM users WHERE username = $1", [username]);
+  return user;
 };
 
 const createUser = async ({ username, email, password }) => {
@@ -185,6 +202,7 @@ module.exports = {
   updateRestaurant,
   getAllUsers,
   getUserById,
+  getUserByUsername,
   createUser,
   updateUser,
   deleteUser,

@@ -6,6 +6,7 @@ const {
   getUserById,
   updateUser,
   deleteUser,
+  getUserByUsername,
 } = require("../db/index");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -35,7 +36,7 @@ usersRouter.get("/", authenticateToken, async (req, res, next) => {
 });
 
 //get single user by ID
-usersRouter.get("/:userID", authenticateToken, async (req, res, next) => {
+usersRouter.get("/:userId", authenticateToken, async (req, res, next) => {
   try {
     const { userId } = req.params;
     const user = await getUserById(userId);
@@ -55,13 +56,12 @@ usersRouter.get("/:userID", authenticateToken, async (req, res, next) => {
 //get users/me - logged in user info
 usersRouter.get("/me", authenticateToken, async (req, res, next) => {
   try {
+    console.log("req.user:", req.user);
+    console.log("typeof req.user.id:", typeof req.user.id);
     const user = await getUserById(req.user.id);
-    if (user) {
-      res.send({ user });
-    } else {
-      res.status(404).send({ message: "User not found" });
-    }
+    res.send(user);
   } catch (error) {
+    console.error("🔥 Error in /me route:", error);
     next(error);
   }
 });
@@ -101,7 +101,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
 //POST register
 usersRouter.post("/register", async (req, res, next) => {
-  const { username, password, name, location } = req.body;
+  const { username, password, email } = req.body;
 
   try {
     const _user = await getUserByUsername(username);
@@ -117,16 +117,15 @@ usersRouter.post("/register", async (req, res, next) => {
     const user = await createUser({
       username,
       password: hashedPassword,
-      name,
-      location,
+      email,
     });
-    const token = jwt.sign(
-      { id: user.id, username },
+    const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET, {
+      expiresIn: "1w",
+    });
 
-      process.env.JWT_SECRET,
-      { expiresIn: "1w " }
-    );
-    res.send({ message: "Signed up!", token });
+    console.log("sending token", token);
+
+    res.send({ token, user });
   } catch ({ name, message }) {
     next({ name, message });
   }

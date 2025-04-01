@@ -46,7 +46,7 @@ reviewsRouter.post("/", async (req, res, next) => {
       rating,
       review_description,
     });
-    res.send({ message: "Review created", newReview });
+    res.send({ newReview });
   } catch (error) {
     next(error);
   }

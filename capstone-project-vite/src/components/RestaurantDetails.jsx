@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchRestaurantById } from "./api";
+import { fetchRestaurantById, submitReview, deleteReview } from "./api";
 import ReviewForm from "./ReviewForm";
-import { submitReview } from "./api";
-import { deleteReview } from "./api";
 
 function RestaurantDetails() {
   const { id } = useParams();
@@ -59,32 +57,47 @@ function RestaurantDetails() {
     }
   };
 
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!restaurant) return <div>Loading...</div>;
+  if (error)
+    return (
+      <p style={{ color: "red", padding: "2rem", textAlign: "center" }}>
+        {error}
+      </p>
+    );
+
+  if (!restaurant)
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>Loading...</div>
+    );
 
   return (
-    <div>
-      <h1>{restaurant.name}</h1>
-      <p>{restaurant.address}</p>
-      <p>Category: {restaurant.category}</p>
-      <h2>Reviews</h2>
-      {restaurant.reviews && restaurant.reviews.length > 0 ? (
-        <ul>
-          {restaurant.reviews.map((review) => (
-            <li key={review.id}>
-              <p>Rating: {review.rating}</p>
-              <p>{review.review_description}</p>
-              <button onClick={() => handleDeleteReview(review.id)}>
-                Delete Review
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No reviews yet</p>
-      )}
+    <div className="page-content">
+      <div className="container">
+        <div className="restaurant-card">
+          <h2>{restaurant.name}</h2>
+          <p>{restaurant.address}</p>
+          <p>{restaurant.category}</p>
 
-      <ReviewForm restaurantId={id} onNewReview={handleNewReview} />
+          <h3>Reviews:</h3>
+          {restaurant.reviews && restaurant.reviews.length > 0 ? (
+            restaurant.reviews.map((review) => (
+              <div className="review" key={review.id}>
+                <p className="review-rating">Rating: {review.rating}</p>
+                <p>{review.review_description}</p>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteReview(review.id)}
+                >
+                  Delete Review
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="no-reviews">No reviews yet.</p>
+          )}
+        </div>
+
+        <ReviewForm restaurantId={id} onNewReview={handleNewReview} />
+      </div>
     </div>
   );
 }

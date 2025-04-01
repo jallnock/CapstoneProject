@@ -21,11 +21,13 @@ async function createTables() {
     console.log("Starting to build tables");
     await client.query(`
          CREATE TABLE users (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(50) NOT NULL, 
-        email VARCHAR(100) NOT NULL, 
-        password VARCHAR(100) NOT NULL
-        );
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) NOT NULL, 
+  email VARCHAR(100) NOT NULL, 
+  password VARCHAR(100) NOT NULL,
+  name VARCHAR(100)
+);
+
           CREATE TABLE restaurants (
           id SERIAL PRIMARY KEY, 
           name VARCHAR(100) NOT NULL, 
@@ -58,13 +60,13 @@ async function createInitialUsers() {
   try {
     console.log("Creating users");
     await client.query(` 
-          INSERT INTO users (username, email, password) VALUES
-          ('Joe Schmoe', 'user1@me.com', 'password1'),
-          ('Suzy Lu', 'user2@me.com', 'password2'),
-          ('Jennifer Smith', 'user3@me.com', 'password3'),
-          ('John Adams', 'user4@me.com', 'password4'), 
-          ('Megan Fox', 'user5@me.com', 'password5')
-          `);
+      INSERT INTO users (username, email, password, name) VALUES
+      ('joe123', 'user1@me.com', 'password1', 'Joe Schmoe'),
+      ('suzyLu', 'user2@me.com', 'password2', 'Suzy Lu'),
+      ('jenS', 'user3@me.com', 'password3', 'Jennifer Smith'),
+      ('johnA', 'user4@me.com', 'password4', 'John Adams'), 
+      ('megF', 'user5@me.com', 'password5', 'Megan Fox')
+    `);
 
     console.log("Done creating users");
   } catch (error) {

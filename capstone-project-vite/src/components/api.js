@@ -118,13 +118,15 @@ export const fetchCurrentUser = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
+
   if (!response.ok) {
     throw new Error("Cannot fetch this user");
   }
+
   return response.json();
 };
 
-export const addRestaurant = async ({ name, location, category }) => {
+export const addRestaurant = async ({ name, address, category }) => {
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("Not authenticated");
@@ -136,10 +138,12 @@ export const addRestaurant = async ({ name, location, category }) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ name, location, category }),
+    body: JSON.stringify({ name, address, category }),
   });
+
   if (!response.ok) {
     throw new Error("Failed to add restaurant");
   }
+
   return response.json();
 };

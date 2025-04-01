@@ -1,74 +1,79 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box ;
-}
-
-body {
-  font-family:Arial, Helvetica, sans-serif;
-  background-color: blanchedalmond;
-  color: cornflowerblue;
-  padding: 20px;
-}
-
-h1, h2, h3, h4 {
-  color: black;
-  margin-bottom: 10px;
-}
-
-form {
-  background-color: burlywood;
-  padding: 20px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-}
-
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 10px;
-}
-
-input,
-textarea {
-width: 100%;
-padding: 7px;
-margin-bottom: 15px;
-border: 1px;
-}
-
-button {
-  background-color: floralwhite;
-  color: navy;
-  padding: 10px 15px;
-  border: none;
-}
-
-button:hover {
-  background-color: beige;
+.page-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .container {
-  max-width: 1200px;
-  margin: auto;
-  padding-left: 20px;
+  max-width: 700px;
+  width: 100%;
+  padding: 2rem 1rem;
+  margin: 0 auto;
 }
 
-nav {
-  margin-bottom: 20px;
-  color: navy;
-  padding: 10px;
+/* Restaurant Card Styling */
+.restaurant-card {
+  width: 100%;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(72, 69, 69, 0.05);
+  margin-bottom: 2rem;
+  transition: transform 0.2s ease;
 }
 
-ul {
-  list-style-type: none;
-  margin-top: 20px;
+.restaurant-card:hover {
+  transform: translateY(-2px);
 }
 
-li {
-  margin-bottom: 10px;
+.restaurant-card h2 {
+  font-size: 1.6rem;
+  color: #3682ee;
+  margin-bottom: 0.25rem;
 }
 
-.home-page {
-  display: inline-flex;
+.restaurant-card p {
+  margin: 0.25rem 0;
+  color: #333;
+}
+
+.restaurant-card h3 {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  color: #444;
+}
+
+/* Review Block */
+.review {
+  background-color: #f7f7f7;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.review-rating {
+  color: #00adb5;
+  font-weight: bold;
+}
+
+.no-reviews {
+  font-style: italic;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+/* Delete Button */
+.delete-button {
+  margin-top: 0.5rem;
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
 }

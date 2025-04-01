@@ -45,7 +45,7 @@ commentsRouter.post("/", async (req, res, next) => {
       review_id,
       comment_text,
     });
-    res.send({ message: "Comment created", newComment });
+    res.send({ newComment });
   } catch (error) {
     next(error);
   }

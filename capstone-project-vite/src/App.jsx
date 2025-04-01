@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import RestaurantsList from "./components/RestaurantList";
 import Account from "./components/Account";
+import AddRestaurantForm from "./components/AddNewRestaurantForm";
 import "./App.css";
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
           path="/restaurants"
           element={token ? <RestaurantsList /> : <Navigate to="/login" />}
         />
+        <Route path="/add-restaurant" element={<AddRestaurantForm />} />
       </Routes>
     </Router>
   );

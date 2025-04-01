@@ -40,8 +40,11 @@ restaurantsRouter.get("/:restaurantId", async (req, res, next) => {
 restaurantsRouter.post("/", async (req, res, next) => {
   try {
     const { name, address, category } = req.body;
+    if (!address) {
+      return res.status(400).send({ error: "Address required" });
+    }
     const newRestaurant = await createRestaurant({ name, address, category });
-    res.send({ message: "Restaurant created:", newRestaurant });
+    res.send({ newRestaurant });
   } catch (error) {
     next(error);
   }
